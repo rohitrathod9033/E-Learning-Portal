@@ -12,4 +12,4 @@ export const AppContextProvider = (props) => {
             {props.children}
         </AppContext.Provider>
     )
-};
+}
