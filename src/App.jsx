@@ -15,7 +15,7 @@ import Navbar from "./components/student/Navbar";
 
 const App = () => {
   return (
-    <div className=" text-default min-h-screen bg-white">
+    <div className="text-default min-h-screen bg-white">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
