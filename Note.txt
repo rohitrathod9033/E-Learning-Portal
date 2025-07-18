@@ -1,0 +1,9 @@
+1. npm install
+2. npm install react-router-dom react-youtube uniqid quill humanize- duration rc-progress react-simple-star-rating
+3. tailwind CSS add..
+
+uniqid = provide uniqid for couses
+quill = rich text librabry
+humanize-duration = convert videos into hours and min and secs
+rc-progress  = design progress barr
+react-simple-star-rating = display star rating for courses
