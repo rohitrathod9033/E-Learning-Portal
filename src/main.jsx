@@ -5,7 +5,7 @@ import { AppContextProvider } from "./context/AppContextProvider.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
 
-// Import your Publishable Key
+// Import your Publishable Key....
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
