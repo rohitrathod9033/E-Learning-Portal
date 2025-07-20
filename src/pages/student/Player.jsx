@@ -29,7 +29,7 @@ const Player = () => {
         [index]: !prev[index],
       } 
     ));
-  };
+  };    
 
   useEffect(()=>{
   getCourseData()
@@ -65,7 +65,7 @@ const Player = () => {
                   <ul className="list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-300">
                     {chapter.chapterContent.map((lecture, i) => (
                       <li key={i} className="flex items-start gap-2 py-1">
-                        <img src={false ? assets.blue_tick_icon : assets.play_icon} alt="play-icon" className="w-4 h-4 mt-1" />
+                        <img src={lecture.isCompleted ? assets.blue_tick_icon : assets.play_icon} alt="play-icon" className="w-4 h-4 mt-1" />
                         <div className="flex items-center justify-between w-full text-gray-800 text-xs md:text-default">
                           <p>{lecture.lectureTitle}</p>
                           <div className="flex gap-2">
@@ -87,9 +87,10 @@ const Player = () => {
           </div>
 
           <div className='flex items-center gap-2 py-3 mt-10'>
-            <h1 className='text-xl font-bold'>Rate this Course :</h1>
-            <Rating initialRating={0} />
+            <h1 className=' text-xl font-bold'>Rate this Course :</h1>
+            <Rating initialRating={0} size={20}/>
           </div>
+
 
         </div>
 
@@ -104,7 +105,7 @@ const Player = () => {
               <div className='flex justify-between items-center mt-1'>
                 <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}
                 </p>
-                <button className='text-blue-600'>{false ? 'Completed' : 'Mark Complete'}</button>
+                <button className='text-blue-600'>{playerData?.isCompleted ? 'Completed' : 'Mark Complete'}</button>
               </div>
 
             </div>
