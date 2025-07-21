@@ -4,7 +4,7 @@ import { assets } from "../../assets/assets";
 const CallToAction = () => {
   return (
     <div className="flex flex-col items-center gap-4 pt-10 pb-24 px-8 md:px-0">
-      <h1 className="text-x1 md : text-4x1 text-gray-800 font-semibold">
+      <h1 className="text-xl md:text-4x1 text-gray-800 font-semibold">
         Learn anything, anytime, anywhere
       </h1>
       <p className="text-gray-500 sm:text-sm">
