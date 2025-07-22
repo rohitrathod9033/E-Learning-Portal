@@ -52,6 +52,6 @@ export const clerkWebhooks = async (req, res) => {
         }
 
     } catch (error) {
-        res. jsos({success: false, message: error.message})
+        res.jsos({success: false, message: error.message})
     }
 };
