@@ -1,6 +1,5 @@
 import { clerkClient } from "@clerk/express";
-import Course from "../models/Course";
-import { v2 as clodinary } from "cloudinary";
+import Course from "../models/Course.js";
 
 // Update roll to educator, normal user can be educator...
 export const updateRoleToEducator = async (req, res) => {

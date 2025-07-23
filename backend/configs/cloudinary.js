@@ -1,7 +1,5 @@
 import {v2 as cloudinary} from 'cloudinary'
 
-import { v2 as cloudinary } from 'cloudinary';
-
 const connectCloudinary = async () => {
   try {
     cloudinary.config({
@@ -10,9 +8,9 @@ const connectCloudinary = async () => {
       api_secret: process.env.CLOUDINARY_SECRET_KEY,
     });
 
-    console.log('✅ Cloudinary connected successfully');
+    console.log('Cloudinary connected successfully');
   } catch (error) {
-    console.error('❌ Failed to configure Cloudinary:', error);
+    console.error('Failed to configure Cloudinary:', error);
   }
 };
 
