@@ -1,7 +1,7 @@
 import { clerkClient } from "@clerk/express";
 import Course from "../models/Course.js";
+import cloudinary from "../configs/cloudinary.js";
 
-// Update roll to educator, normal user can be educator...
 export const updateRoleToEducator = async (req, res) => {
   try {
     const userId = req.auth.userId;
@@ -18,8 +18,6 @@ export const updateRoleToEducator = async (req, res) => {
   }
 };
 
-// Add New Course.....
-
 export const addCourse = async (req, res) => {
   try {
     const { courseData } = req.body;
@@ -35,9 +33,11 @@ export const addCourse = async (req, res) => {
 
     const parsedCourseData = await JSON.parse(courseData);
     parsedCourseData.educator = educatorId;
+
     const newCourse = await Course.create(parsedCourseData);
-    const imageUpload = await cloudinary.uploader.upload(imageFile.path);
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path); // ✅ fixed usage
     newCourse.courseThumbnail = imageUpload.secure_url;
+
     await newCourse.save();
 
     res.json({ success: true, message: "Course Added" });
