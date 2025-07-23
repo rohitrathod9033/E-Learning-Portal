@@ -1,13 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "description": "",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "server": "nodemon server.js",
     "start": "node server.js"
   },
-  "keywords": [],
   "author": "Rohit Rathod",
   "license": "ISC",
   "dependencies": {
@@ -21,6 +21,5 @@
     "nodemon": "^3.1.10",
     "stripe": "^18.3.0",
     "svix": "^1.42.0"
-  },
-  "description": ""
+  }
 }

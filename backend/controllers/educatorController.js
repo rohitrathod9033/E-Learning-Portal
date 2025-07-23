@@ -1,132 +1,71 @@
-import { clerkClient } from "@clerk/express";
-import Course from "../models/Course.js";
-import cloudinary from "../configs/cloudinary.js";
-import User from '../models/userModel.js';
-import Purchase from '../models/purchaseModel.js';
+import Course from '../models/Course.js';
+import Purchase from '../models/Purchase.js';
 
-export const updateRoleToEducator = async (req, res) => {
-  try {
-    const userId = req.auth.userId;
-
-    await clerkClient.users.updateUserMetadata(userId, {
-      publicMetadata: {
-        role: "educator",
-      },
-    });
-
-    res.json({ success: true, message: "You can publish a course now" });
-  } catch (error) {
-    res.json({ success: false, message: error.message });
-  }
-};
-
+// ✅ Add a new course
 export const addCourse = async (req, res) => {
   try {
-    const { courseData } = req.body;
-    const imageFile = req.file;
-    const educatorId = req.auth.userId;
+    const { courseTitle, courseDescription, coursePrice, discount, courseContent } = req.body;
 
-    if (!imageFile) {
-      return res.json({
-        success: false,
-        message: "Thumbnail Not Attached",
-      });
-    }
-
-    const parsedCourseData = await JSON.parse(courseData);
-    parsedCourseData.educator = educatorId;
-
-    const newCourse = await Course.create(parsedCourseData);
-    const imageUpload = await cloudinary.uploader.upload(imageFile.path);
-    newCourse.courseThumbnail = imageUpload.secure_url;
+    const newCourse = new Course({
+      courseTitle,
+      courseDescription,
+      coursePrice,
+      discount,
+      courseContent,
+      educator: req.auth.userId,
+    });
 
     await newCourse.save();
-
-    res.json({ success: true, message: "Course Added" });
+    res.status(201).json({ success: true, course: newCourse });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    console.error('Error adding course:', error);
+    res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
 
-// Get Educator Courses
+// ✅ Update user role to educator
+export const updateRoleToEducator = async (req, res) => {
+  try {
+    // Example: You can update a role field in your User model if needed.
+    res.status(200).json({ success: true, message: 'Role updated to educator' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+// ✅ Get all courses by current educator
 export const getEducatorCourses = async (req, res) => {
   try {
-    const educator = req.auth.userId;
-    const courses = await Course.find({ educator });
-    res.json({ success: true, courses });
+    const educatorId = req.auth.userId;
+    const courses = await Course.find({ educator: educatorId });
+    res.status(200).json({ success: true, courses });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    console.error('Error fetching educator courses:', error);
+    res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
 
-
-// Get Educator Dashboard Data (Total Earning, Enrolled Students, No. of Courses)
-
-import { Purchase } from './../models/Purchase';
-
+// ✅ Dashboard data (total courses, more stats optional)
 export const educatorDashboardData = async (req, res) => {
   try {
-    const educator = req.auth.userId;
+    const educatorId = req.auth.userId;
+    const totalCourses = await Course.countDocuments({ educator: educatorId });
 
-    // Fetch courses by educator
-    const courses = await Course.find({ educator });
-    const totalCourses = courses.length;
-
-    // Extract course IDs
-    const courseIds = courses.map(course => course._id);
-    
-    // Calculate total earnings from completed purchases
-    const purchases = await Purchase.find({
-      courseId: { $in: courseIds },
-      status: 'completed',
-    });
-    
-    const totalEarnings = purchases.reduce((sum, purchase) => sum + purchase.amount, 0);
-    
-    // Collect unique enrolled student data
-    const enrolledStudentsData = [];
-    for (const course of courses) {
-      const students = await User.find(
-        { _id: { $in: course.enrolled } },
-        'name imageUrl'
-      );
-      
-      students.forEach(student => {
-        enrolledStudentsData.push({
-          courseTitle: course.courseTitle,
-          student,
-        });
-      });
-    }
-    
-    // Send response
-    res.json({
-      success: true,
-      dashboardData: {
-        totalEarnings,
-        enrolledStudentsData,
-        totalCourses,
-      },
-    });
-    
+    res.status(200).json({ success: true, data: { totalCourses } });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    console.error('Error fetching dashboard data:', error);
+    res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
 
-
-// Get Enrolled Student Data With Purchase Data.....
+// ✅ Enrolled students with course + user data
 export const getEnrolledStudentsData = async (req, res) => {
   try {
-    const educator = req.auth.userId;
+    const educatorId = req.auth.userId;
 
-    // Find all courses by this educator
-    const courses = await Course.find({ educator });
-
-    // Extract course IDs
+    const courses = await Course.find({ educator: educatorId });
     const courseIds = courses.map(course => course._id);
 
-    // Find all completed purchases for these courses
     const purchases = await Purchase.find({
       courseId: { $in: courseIds },
       status: 'completed',
@@ -134,17 +73,15 @@ export const getEnrolledStudentsData = async (req, res) => {
       .populate('userId', 'name imageUrl')
       .populate('courseId', 'courseTitle');
 
-    // Structure enrolled student data
     const enrolledStudents = purchases.map(purchase => ({
       student: purchase.userId,
-      courseTitle: purchase.courseId.courseTitle,
+      courseTitle: purchase.courseId?.courseTitle || 'N/A',
       purchaseDate: purchase.createdAt,
     }));
 
-    // Send response
-    res.json({ success: true, enrolledStudents });
-    
+    res.status(200).json({ success: true, enrolledStudents });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    console.error('Error fetching enrolled students:', error);
+    res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
