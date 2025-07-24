@@ -1,8 +1,9 @@
+// models/User.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true },
+    _id: { type: String, required: true },  // Use custom string ID
     name: { type: String, required: true },
     email: { type: String, required: true },
     imageUrl: { type: String, required: true },
@@ -12,7 +13,9 @@ const userSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
-  }, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model("User", userSchema);
 

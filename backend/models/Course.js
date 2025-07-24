@@ -1,5 +1,7 @@
+// models/Course.js
 import mongoose from "mongoose";
 
+// Lecture schema
 const lectureSchema = new mongoose.Schema(
   {
     lectureId: { type: String, required: true },
@@ -12,6 +14,7 @@ const lectureSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// Chapter schema
 const chapterSchema = new mongoose.Schema(
   {
     chapterId: { type: String, required: true },
@@ -22,6 +25,7 @@ const chapterSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// Course schema
 const courseSchema = new mongoose.Schema(
   {
     courseTitle: { type: String, required: true },
@@ -43,6 +47,6 @@ const courseSchema = new mongoose.Schema(
   { timestamps: true, minimize: false }
 );
 
-const Course = mongoose.model('Course', courseSchema);
+const Course = mongoose.model("Course", courseSchema);
 
 export default Course;

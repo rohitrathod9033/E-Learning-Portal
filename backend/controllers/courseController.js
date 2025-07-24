@@ -1,6 +1,7 @@
-import Course from '../models/Course.js';
+// controllers/courseController.js
+import Course from "../models/Course.js";
 
-// ✅ Get All Published Courses
+// GET /courses/all — Fetch all published courses
 export const getAllCourse = async (req, res) => {
   try {
     const courses = await Course.find({ isPublished: true })
@@ -13,16 +14,20 @@ export const getAllCourse = async (req, res) => {
   }
 };
 
-// ✅ Get Course by ID (Export This!)
-export const getCourseId = async (req, res) => {
+// GET /courses/:id — Fetch a course by ID with filtered lectures
+export const getCourseById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const courseData = await Course.findById(id).populate({ path: 'educator' });
+    const courseData = await Course.findById(id).populate({ path: "educator" });
 
-    // Remove lectureUrl if isPreviewFree is false
-    courseData.courseContent.forEach(chapter => {
-      chapter.chapterContent.forEach(lecture => {
+    if (!courseData) {
+      return res.status(404).json({ success: false, message: "Course not found" });
+    }
+
+    // Hide lectureUrl if not a free preview
+    courseData.courseContent.forEach((chapter) => {
+      chapter.chapterContent.forEach((lecture) => {
         if (!lecture.isPreviewFree) {
           lecture.lectureUrl = "";
         }

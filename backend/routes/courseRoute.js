@@ -1,30 +1,13 @@
-import express from "express";
-import {
-  addCourse,
-  educatorDashboardData,
-  getEducatorCourses,
-  getEnrolledStudentsData,
-  updateRoleToEducator,
-} from "../controllers/educatorController.js";
+// routes/courseRoutes.js
+import express from 'express';
+import { getAllCourse, getCourseById } from '../controllers/courseController.js';
 
-import { protectEducator } from "../middlewares/authMiddleware.js";
-import upload from "../configs/multer.js";
+const router = express.Router();
 
-const educatorRouter = express.Router();
+// GET /courses/all
+router.get('/all', getAllCourse);
 
-educatorRouter.get("/update-role", updateRoleToEducator);
-educatorRouter.post(
-  "/add-course",
-  protectEducator,
-  upload.single("image"),
-  addCourse
-);
-educatorRouter.get("/my-courses", protectEducator, getEducatorCourses);
-educatorRouter.get("/dashboard-data", protectEducator, educatorDashboardData);
-educatorRouter.get(
-  "/enrolled-students",
-  protectEducator,
-  getEnrolledStudentsData
-);
+// GET /courses/:id
+router.get('/:id', getCourseById);
 
-export default educatorRouter;
+export default router;
