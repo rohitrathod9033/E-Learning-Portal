@@ -1,34 +1,40 @@
+// controllers/userController.js
 import User from "../models/User.js";
 
-// Get User Data
+// ✅ Get User Data
 export const getUserData = async (req, res) => {
   try {
     const userId = req.auth.userId;
-    const user = await User.findById(userId);
+
+    const user = await User.findOne({ id: userId }); // ⬅️ FIXED
 
     if (!user) {
-      return res.json({ success: false, message: 'User Not Found' });
+      return res.status(404).json({ success: false, message: 'User Not Found' });
     }
 
     return res.json({ success: true, user });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Users Enrolled Course With Lecture Links
-
+// ✅ Get Enrolled Courses
 export const userEnrolledCourses = async (req, res) => {
   try {
     const userId = req.auth.userId;
-    const userData = await User.findById(userId).populate('enrolledCourses');
+
+    const user = await User.findOne({ id: userId }).populate('enrolledCourses'); // ⬅️ FIXED
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User Not Found' });
+    }
 
     res.json({
       success: true,
-      enrolledCourses: userData.enrolledCourses,
+      enrolledCourses: user.enrolledCourses,
     });
   } catch (error) {
-    res.json({
+    res.status(500).json({
       success: false,
       message: error.message,
     });

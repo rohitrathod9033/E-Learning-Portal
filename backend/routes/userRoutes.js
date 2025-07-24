@@ -1,3 +1,4 @@
+// routes/userRoutes.js
 import express from 'express';
 import { getUserData, userEnrolledCourses } from '../controllers/userController.js';
 
