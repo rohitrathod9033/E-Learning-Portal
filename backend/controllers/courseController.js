@@ -1,4 +1,3 @@
-// controllers/courseController.js
 import Course from "../models/Course.js";
 
 // GET /courses/all — Fetch all published courses
