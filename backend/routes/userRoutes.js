@@ -9,3 +9,4 @@ userRouter.get('/enrolled-courses', userEnrolledCourses);
 userRouter.post('/purchase', purchaseCourse);
 
 export default userRouter;
+    
