@@ -18,7 +18,7 @@ const MyCourses = () => {
   return courses ? (
     <div className="min-h-screen flex flex-col justify-between">
       {/* Main Content */}
-      <div className="flex-grow md:p-8 p-4 pt-8">
+      <div className="flex-grow md:p-8 p-4 pt-8">z
         <h2 className="pb-4 text-lg font-medium">My Courses</h2>
 
         <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
